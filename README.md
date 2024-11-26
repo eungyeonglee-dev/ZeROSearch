@@ -46,17 +46,32 @@ python zerosearch.py {arg1, arg2, ...}
 - `num_node`: The number of nodes. If homogeneous, you have to use it.
 - `type`: The type of LLM model. you can have only Llama2 13B. If you want to add another LLM, should create profile DB.
 - `comm_type`: The type of communication between nodes. you can have only ib which is infiniband card.
-- `record`: If true, save the result of prediction.
-- `pretty`: If true, align columns of result. the columns are `rank` `real_rank` `m` `mbs` `tp` `pp` `dp` `dp_method` `A10`(`A100`, `A6000`) `estimated time(s/step)` `pipeline time` `DP all-reduce time` `Emb layer all-reduce time` `gpumem` `is_oom` `node placement` `exp_partition` `partition` `train_cost` `price_per_step`
+- `record`: If `True`, save the result of prediction.
+- `pretty`: If `True`, align columns of result. the columns are `rank` `real_rank` `m` `mbs` `tp` `pp` `dp` `dp_method` `A10`(`A100`, `A6000`) `estimated time(s/step)` `pipeline time` `DP all-reduce time` `Emb layer all-reduce time` `gpumem` `is_oom` `node placement` `exp_partition` `partition` `train_cost` `price_per_step`
     - `rank`: The rank of combinations. `real_rank` is the rank except `is_oom` True.
     - `dp_method`: The method of Data Parallelism. It includes `zero0` `zero1` `zero2` `zero3`.
+- `pareto`: If `True`, you run pareto experiments.
+- `exhaustive`: If `True`, you can get predictions of the specific configuration `mbs` `tp` `pp` `dp` `partition`.
+- `search_method`: The meta-heuristic search methohd. you can select among `minmax` `ga`. `ga` is Genetic Algorithms.
   
 ## example
+
+The main python file of ZeroSearch framework is in the `src` directory. If you use it, you enter `src` directory.
+```
+cd src
+```
 
 - homegeneous 8 A10 nodes with Llama2 13B
 
 ```
 python zerosearch.py --node_type A10 --num_node 8 --type llama2_13B --framework d
 ```
-
+- heterogeneous 3 A10, 5 A6000 nodes with Llama2 13B
+```
+python zerosearch.py --node_type A10 A6000 --node_type_num_node 3 5 --type llama2_13B --framework d
+```
+- get pareto graph. heterogeneous 3 A10, 5 A6000 nodes with Llama2 13B
+```
+python zerosearch.py --node_type A10 A6000 --node_type_num_node 3 5 --type llama2_13B --framework d
+```
 
