@@ -39,7 +39,7 @@ def factor(N, upper=None):
             ret.append(i)
     return ret
 
-def get_dp_method_and_overlap(args:Namespace):
+def get_dp_method(args:Namespace):
     # ZeRO, overlap_comm --framework, --overlap_comm
     if args.framework == "m":
         # search only Megatron-LM framework
@@ -56,17 +56,10 @@ def get_dp_method_and_overlap(args:Namespace):
     else:
         assert False, "you have to chooese framework among m, d, both, and default"
 
-    if args.overlap_comm is True:
-        overlap = [True, False]
-    elif args.overlap_comm is False:
-        overlap = [False]
-    else:
-        assert False, "you have to choose overlap_comm option amog True, False which is bool type"
-    
     if args.exhaustive:
         dp_method = "zero3"
         overlap = False
-    return dp_method, overlap
+    return dp_method
 
 def no_placement_strategy(M, N, gbs, known, num_layers):
     # known is 3d parallelism combination (tp, pp, dp)
