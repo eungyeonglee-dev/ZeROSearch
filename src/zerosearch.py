@@ -16,7 +16,7 @@ import numpy as np
 import pandas as pd
 import torch
 
-from utils import get_dp_method_and_overlap, no_placement_strategy_with_zero, get_node_map
+from utils import get_dp_method, no_placement_strategy_with_zero, get_node_map
 from estimate import zerosearch
 from device_placement import device_placement, get_cluster_list
 from model_config import get_model_config
@@ -26,7 +26,7 @@ parser.add_argument("--node_type", type=str, nargs='*', help="the type of node t
 parser.add_argument("--node_type_num_node", type=str, nargs="*", help="the number of each node. It will match with node_type.")
 parser.add_argument("--num_node", type=int, default=8, help="the number of all nodes.")
 parser.add_argument("--type", type=str, default="gpt2XL")
-parser.add_argument("--gpu_per_node", type=int, default=64)
+parser.add_argument("--gpu_per_node", type=int, default=4)
 parser.add_argument("--custom_gbs", type=int, default=64)
 parser.add_argument("--custom_num_layer", type=int, default=48)
 parser.add_argument("--precision", type=int, default=16)
@@ -70,7 +70,7 @@ pwd_path = os.environ['PWD']
 dir_path = os.path.join(pwd_path,'logs')
 if not os.path.exists(dir_path):
     os.mkdir(dir_path)
-args.profiledb_path = os.path.join(pwd_path,'src',args.profiledb_path)
+args.profiledb_path = os.path.join(os.pardir, args.profiledb_path)
     
 record_file=f'N{args.num_node}_M{args.gpu_per_node}_model_{args.type}_comm_{args.comm_type}' + args.add_exp_name
 
@@ -94,7 +94,7 @@ elif args.comm_type == "ib": # 4th generation UBAI cluster
 else: 
     assert args.comm_type not in ["ib"], "comm_type must be 'ib'"
     
-dp_method, overlap = get_dp_method_and_overlap(args)
+dp_method = get_dp_method(args)
     
 # get_cluster_list: the function which get each number of A10, A6000, RTX3090 node. depending on model type, it is different. default value is node num is 8
 cluster_list = get_cluster_list(args, node_map)
@@ -160,7 +160,6 @@ for cluster in cluster_list: # cluster_list is list of cluster combination. this
             # print(f"i: {i}")
             # ret이 끝날때까지 무한 반복            
             ret = no_placement_strategy_with_zero(args, M=gpu_per_node, N=num_node, gbs=gbs, known=known, num_layers=model_config["num_layers"], dp_method=dp_method, exhaustive_dict=exhaustive_dict)
-            # ret = no_placement_strategy_with_zero_and_overlap(M=gpu_per_node, N=num_node, gbs=gbs, known=known, num_layers=model_config["num_layers"], dp_method=dp_method, overlap=overlap)
             
             if ret is None:
                 break
