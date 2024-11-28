@@ -7,6 +7,7 @@ ZERO_STAGE=$5
 # NUM_HETERO == 1 GPU TYPE, NUM_HETERO == 2 A GPU TYPE
 A_GPU_TYPE=$6 # A10, A6000
 NUM_HETERO=$7 # the number of heterogeneous nodes
+B_GPU_TYPE=A6000
 
 if  [ $NUM_HETERO == "1" ]; then
     . _00_conf.sh $TP $PP $DP $PARTITION $ZERO_STAGE
@@ -18,7 +19,7 @@ if  [ $NUM_HETERO == "1" ]; then
 elif [ $NUM_HETERO == "2" ]; then
     . _00_conf.sh $TP $PP $DP $PARTITION
     sbatch _02_sbatch_hetero2_$A_GPU_TYPE.sh $TP $PP $DP $PARTITION
-    sbatch _02_sbatch_hetero2_RTX3090.sh $TP $PP $DP $PARTITION
+    sbatch _02_sbatch_hetero2_$B_GPU_TYPE.sh $TP $PP $DP $PARTITION
     
 elif [ $NUM_HETERO == "3" ]; then
     . _00_conf.sh $TP $PP $DP $PARTITION
