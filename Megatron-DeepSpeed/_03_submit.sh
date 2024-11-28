@@ -17,7 +17,7 @@ if  [ $NUM_HETERO == "1" ]; then
     echo "$A_GPU_TYPE homogeneous"
 
 elif [ $NUM_HETERO == "2" ]; then
-    . _00_conf.sh $TP $PP $DP $PARTITION
+    . _00_conf_hetero2.sh $TP $PP $DP $PARTITION
     sbatch _02_sbatch_hetero2_$A_GPU_TYPE.sh $TP $PP $DP $PARTITION
     sbatch _02_sbatch_hetero2_$B_GPU_TYPE.sh $TP $PP $DP $PARTITION
     
