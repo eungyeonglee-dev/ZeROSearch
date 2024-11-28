@@ -506,7 +506,7 @@ def EstimatePeakMemory(args:Namespace, partition, model_config, parallel_config,
                     # debugging
                     # activation += (s * b * p * h ) * (10 + ( 24 / tp ) + 5 * (a * s) / (h * tp) )  # tensor + sequence
                     activation += (10*s*b*h + (16/tp)*s*b*h + (2*s*b*d/tp) + (5/tp)*kv_value*s*s*b) * (1 + (pp-1)/(pp*m))
-                    print(f"activation: stage {j}th layer {i}th {activation.item()/1024/1024/1024}")
+                    # print(f"activation: stage {j}th layer {i}th {activation.item()/1024/1024/1024}")
                 else:
                     param_count += ( 12 * h ** 2 ) / tp
                     activation += (s * b * p * h ) * (10 + ( 24 / tp ) + 5 * (a * s) / (h * tp) )  # tensor + sequence 

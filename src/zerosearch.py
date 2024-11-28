@@ -217,8 +217,8 @@ for cluster in cluster_list: # cluster_list is list of cluster combination. this
                 
                     
         e = time.time()
-        print(f"node placement search time: {e - s:0.5f}")
-print(f"Finished {time.time() - time_s}")
+        # print(f"node placement search time: {e - s:0.5f}")
+print(f"Finished {time.time() - time_s:.5f}")
 
 # sorted_settings = sorted(want_simulate, key = lambda kv: kv[8])
 columns = ['m','mbs','tp','pp','dp','dp method', 'overlap_comm','node placement', 'partition', \
