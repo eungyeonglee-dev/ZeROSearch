@@ -9,14 +9,14 @@ A_GPU_TYPE=$6 # A10, A6000
 NUM_HETERO=$7 # the number of heterogeneous nodes
 
 if  [ $NUM_HETERO == "1" ]; then
-    . _00_conf_homo_${A_GPU_TYPE}.sh $TP $PP $DP $PARTITION $ZERO_STAGE
+    . _00_conf.sh $TP $PP $DP $PARTITION $ZERO_STAGE
     sbatch_job="_02_sbatch_E$A_GPU_TYPE.sh"
     echo $sbatch_job
     sbatch $sbatch_job $TP $PP $DP $PARTITION $ZERO_STAGE
     echo "$A_GPU_TYPE homogeneous"
 
 elif [ $NUM_HETERO == "2" ]; then
-    . _00_conf_hetero2.sh $TP $PP $DP $PARTITION
+    . _00_conf.sh $TP $PP $DP $PARTITION
     sbatch _02_sbatch_hetero2_$A_GPU_TYPE.sh $TP $PP $DP $PARTITION
     sbatch _02_sbatch_hetero2_RTX3090.sh $TP $PP $DP $PARTITION
     
